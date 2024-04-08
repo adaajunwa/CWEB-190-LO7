@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Create and display cookies</title>
+    </head>
+
+    <body>
+        <h1>Fun with cookies!</h1>
+        <p>
+            <label for="nameField">Name</label>
+            <input type="text" id="nameField" />
+        </p>
+        <p>
+            <label for="valueField">Value</label>
+            <input type="text" id="valueField" />
+        </p>
+        <p>
+            <input type="radio" id="cookieP" name="cookieType"
+                   value="persistent" checked="checked" />
+            <label for="cookieP">Persistent</label>
+            <input type="radio" id="cookieS" name="cookieType"
+                   value="session" />
+            <label for="cookieS">Session</label>
+        </p>
+        <p>
+            <button id="btnSet">Set cookie</button>
+        </p>
+        <p>
+            Cookie values: <span id="cookieValues"></span>
+        </p>
+        <p>
+            Test Encoding <span id="testEncode"></span>
+        </p>
+        <p>
+            <button id="btnDisplay">Display cookies</button>
+        </p>
+        <p>
+            <button id="btnDetete">Delete cookie</button>
+        </p>
+    <script>
+        window.onload = function() {
+            //When display button is clicked, show all page cookies
+            document.getElementById("btnDisplay").onclick = function() {
+                let cookieName = document.getElementById("nameField").value;
+                let cookieValue = document.getElementById("valueField").value;
+                //The cookie property of the document object sets or returns
+                //a semicolon-separated list of cookie key=value pairs
+                document.cookie = "custid=123";// add a cookie to document page
+                //show all document cookies
+                document.getElementById("cookieValues").innerText = document.cookie
+                //encodeURIComponent() encodes a URI component by replacing characters in the given string with escape sequences e.g. space is %20
+                //encodeURI("https://test.com/my test.html") is encoded as
+                //https%3A%2F%2Ftest.com%2Fmy%20test.html
+                document.getElementById("testEncode").innerText = " "+ encodeURIComponent(cookieName) + "=" + encodeURIComponent(cookieValue) ;
+                document.getElementById("testEncode").innerText = "Show Decode Example "+ decodeURIComponent( "Santa%3BClaus" )
+                };
+
+            document.getElementById("btnSet").onclick = function() {
+               // let cookieName = document.getElementById("nameField").value;
+               // let cookieValue = document.getElementById("valueField").value;
+                let cookieString = encodeURIComponent(cookieName) + "=" + encodeURIComponent(cookieValue);
+
+                //To specify an expiration date for a cookie, we add a semicolon, then a space,
+                // then "expires=" followed by a date in the UTC format
+                // e.g. document.cookie = "program=CST; expires=Tue, 30 Jun 2020 12:00:00 GMT";
+                if (document.getElementById("cookieP").checked) {// if persistence is checked
+                   let expiryDate = new Date();// create a date object
+                    expiryDate.setDate(expiryDate.getDate() + 7);//get system date and set it to
+                                                                 // 7 days from now
+                    let dateString = expiryDate.toUTCString();//convert set date to UTC format
+                                                              //and save in dateString variable
+                    cookieString += "; expires=" + dateString;
+                }
+
+                document.cookie = cookieString;
+            };
+
+            document.getElementById("btnDelete").onclick = function() {
+            //delete a cookie by setting an expiration date in the past
+                document.cookie = "custid=123; expires=Thu, 1 Jan 1970 00:00:00 UTC";
+            }
+        };
+        //We can specify that a cookie applies to any page under a particular folder on a website root
+        //using the path annotation (path = [specified path]) for example
+        // document.cookie = "custid=123; path=/child-Folder";
+        //Update your Set Cookie Button to use the setCookie function of the cookieutils.js file
+
+    </script>
+    </body>
+</html>
